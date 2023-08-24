@@ -1,1 +1,6 @@
+streamlit
+requests
+selenium-wire
+Pillow
+bs4
 
