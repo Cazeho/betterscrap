@@ -1,7 +1,48 @@
+
 version: '3.1'
 services:
      betterscrap:
       container_name: betterscrap
       build: .
+      networks:
+        - internal
+
+
+
+     keycloak:
+      image: jboss/keycloak:latest
+
+      volumes:
+        - ./cert/keycloak.crt:/etc/x509/https/tls.crt"
+        - ./cert/keycloak.key:/etc/x509/https/tls.key
+      environment:
+        - KEYCLOAK_USER=admin
+        - KEYCLOAK_PASSWORD=admin
+        - KC_HTTPS_CERTIFICATE_FILE=/etc/x509/https/tls.crt
+        - KC_HTTPS_CERTIFICATE_KEY_FILE=/etc/x509/https/tls.key
       ports:
-          - 8501:8501
+        - 8080:8080
+        - 8443:8443
+      networks:
+        - internal
+
+
+     nginx:
+      image: nginx:latest
+      volumes:
+         - ./nginx.conf:/etc/nginx/nginx.conf
+         - ./cert:/etc/nginx/certs
+      ports:
+        - 80:80
+        - 443:443
+      depends_on:
+        - keycloak
+
+      networks:
+        - internal
+
+
+
+networks:
+  internal:
+    driver: bridge
