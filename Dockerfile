@@ -42,4 +42,3 @@ RUN apt-get purge --auto-remove -y curl unzip && \
 ENTRYPOINT ["streamlit","run"]
 CMD ["app.py" ]
 EXPOSE 8501
-
